@@ -1,6 +1,11 @@
 package logger.reconfig.example
 
 import groovy.util.logging.Log4j2
+import org.apache.logging.log4j.Level
+import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.core.LoggerContext
+import org.apache.logging.log4j.core.config.AppenderRef
+import org.apache.logging.log4j.core.config.LoggerConfig
 import spock.lang.Specification
 
 import java.util.concurrent.atomic.AtomicLong
@@ -41,11 +46,33 @@ class ExampleBananaFactoryTest extends Specification {
                 })
             }
         }
+        and: "warnings are suppressed to avoid log spam"
+        LoggerContext loggerContext = LogManager.getContext(false) as LoggerContext
+        loggerContext.configuration.addLogger(
+                ExampleBananaFactory.name,
+                LoggerConfig.createLogger(
+                        true,
+                        Level.ERROR,
+                        ExampleBananaFactory.name,
+                        "false",
+                        loggerContext.configuration.appenders.collect {
+                            AppenderRef.createAppenderRef(
+                                    it.key,
+                                    null,
+                                    null)
+                        } as AppenderRef[],
+                        null,
+                        loggerContext.configuration,
+                        null))
+        loggerContext.updateLoggers()
         when: "all clients are served"
         clients*.start()
         clients*.join()
         then: "number of served good and bad bananas match what we had in store"
         good.get() == storage["Ecuador"].second
         bad.get() == storage["Norway"].second
+        cleanup:
+        loggerContext.configuration.removeLogger(ExampleBananaFactory.name)
+        loggerContext.updateLoggers()
     }
 }
