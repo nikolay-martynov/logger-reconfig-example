@@ -3,12 +3,16 @@
  */
 package logger.reconfig.example
 
+import groovy.util.logging.Log4j2
+
+/**
+ * Application entry point.
+ */
+@Log4j2
 class App {
-    String getGreeting() {
-        return 'Hello world.'
-    }
+    final String greeting = 'Hello world.'
 
     static void main(String[] args) {
-        println new App().greeting
+        log.info new App().greeting
     }
 }
