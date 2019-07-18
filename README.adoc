@@ -1,0 +1,8 @@
+= Example of per feature test control of log level
+
+This is a source code for example in an article
+about how to adjust log level for a given class
+on a per feature test level.
+
+See link:src/test/groovy/logger/reconfig/example/ExampleBananaFactoryTest.groovy[]
+for details.
