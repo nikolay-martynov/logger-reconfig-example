@@ -6,3 +6,5 @@ on a per feature test level.
 
 See link:src/test/groovy/logger/reconfig/example/ExampleBananaFactoryTest.groovy[]
 for details.
+
+See link:https://www.linkedin.com/pulse/adjusting-log-level-specific-feature-test-nikolay-martynov/[] for article itself.
